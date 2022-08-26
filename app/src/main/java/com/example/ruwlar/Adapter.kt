@@ -23,9 +23,10 @@ class Adapter: RecyclerView.Adapter<Adapter.ViewHolder>() {
             binding.apply {
                 tvItem.text = ruwlar.name
                 ivNext.isVisible = ruwlar.has_children == 1
+                binding.root.isEnabled = ruwlar.has_children == 1
 
                 cardView.setOnClickListener {
-                    itemClick.invoke(ruwlar.id)
+                    itemClick.invoke(ruwlar)
                 }
             }
         }
@@ -43,8 +44,8 @@ class Adapter: RecyclerView.Adapter<Adapter.ViewHolder>() {
         return ViewHolder(binding)
     }
 
-    private var itemClick: (id: Int) -> Unit = {}
-    fun setItemClickListener(itemClickListener: (id: Int) -> Unit) {
+    private var itemClick: (ruw: Ruwlar) -> Unit = {}
+    fun setItemClickListener(itemClickListener: (ruw: Ruwlar) -> Unit) {
         this.itemClick = itemClickListener
     }
 }

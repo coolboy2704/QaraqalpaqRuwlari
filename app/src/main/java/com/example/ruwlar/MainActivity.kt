@@ -3,6 +3,7 @@ package com.example.ruwlar
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.widget.addTextChangedListener
 import com.example.ruwlar.data.DataBase
@@ -12,7 +13,7 @@ import com.example.ruwlar.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMainBinding
+    private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
     private lateinit var ruwlarDao: RuwlarDao
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var ruwlarDataBase: DataBase
@@ -22,47 +23,31 @@ class MainActivity : AppCompatActivity() {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(R.layout.activity_main)
+        setContentView(binding.root)
 
-        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, FragmentRuwlar()).commit()
-
-        sharedPreferences = getSharedPreferences("Rwlar", MODE_PRIVATE)
+        sharedPreferences = getSharedPreferences("Ruwlar", MODE_PRIVATE)
         ruwlarDataBase = DataBase.getInstance(this)
         ruwlarDao = ruwlarDataBase.ruwlarDao()
 
-        getNewRuwlar(0)
-
-        adapter.setItemClickListener {
-            getNewRuwlar(it)
-        }
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, FragmentRuwlar())
+            .commit()
 
         binding.searchView.addTextChangedListener {
-            it?.let { editable ->
-                val searchValue = editable.toString()
-                val newList = ruwlarDao.searchName("%$searchValue%")
-                adapter.models = newList
-            }
+            val searchValue = it.toString()
+            val newList = ruwlarDao.searchName("%$searchValue%")
+            adapter.models = newList
         }
     }
 
     override fun onBackPressed() {
         val parentId = sharedPreferences.getInt(PARENT_ID, -1)
 
-        if (parentId == 0){
+        if (parentId == 0) {
             finish()
         } else {
             val grandParentId = ruwlarDao.getParentId(parentId)
-            getNewRuwlar(grandParentId)
-        }
-    }
-
-    fun getNewRuwlar(id: Int){
-        val newRuwlar = ruwlarDao.getNameRuwlar(id)
-        adapter.models = newRuwlar
-
-        newRuwlar.firstOrNull()?.let {
-            sharedPreferences.edit().putInt(PARENT_ID, it.parent_id).apply()
+            Provider.getNewRuwlar(this, grandParentId)
         }
     }
 }
