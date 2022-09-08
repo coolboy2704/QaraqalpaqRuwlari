@@ -10,13 +10,12 @@ import com.example.ruwlar.databinding.ItemBinding
 
 class Adapter: RecyclerView.Adapter<Adapter.ViewHolder>() {
 
-    var models = listOf<Ruwlar>()
+    var models: List<Ruwlar> = listOf()
         @SuppressLint("NotifyDataSetChanged")
         set(value) {
             field = value
             notifyDataSetChanged()
         }
-
 
     inner class ViewHolder(private val binding: ItemBinding) : RecyclerView.ViewHolder(binding.root){
         fun bind(ruwlar: Ruwlar){

@@ -25,7 +25,7 @@ abstract class DataBase: RoomDatabase() {
                     DataBase::class.java,
                     "Rwlar.db"
                 )
-                    .createFromAsset("rwlar.db")
+                    .createFromAsset("Rwlar.db")
                     .allowMainThreadQueries()
                     .build()
                 INSTANCE = db

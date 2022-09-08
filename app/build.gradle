@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
+    id 'kotlin-android-extensions'
 
 }
 
@@ -38,7 +39,9 @@ android {
 
 dependencies {
 
-    def room_version = "2.4.2"
+    def room_version = "2.4.3"
+    def lottieVersion = "3.4.0"
+    implementation "com.airbnb.android:lottie:$lottieVersion"
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.2'
@@ -50,4 +53,7 @@ dependencies {
 
     implementation "androidx.room:room-runtime:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
+
+    implementation "io.reactivex.rxjava3:rxjava:3.0.2"
+    implementation "android.room:room-rxjava3:$room_version"
 }

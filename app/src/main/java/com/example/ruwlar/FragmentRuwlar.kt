@@ -3,6 +3,7 @@ package com.example.ruwlar
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -11,7 +12,7 @@ import com.example.ruwlar.data.Keys
 import com.example.ruwlar.data.RuwlarDao
 import com.example.ruwlar.databinding.FragmentBinding
 
-class FragmentRuwlar: Fragment(R.layout.fragment) {
+class FragmentRuwlar : Fragment(R.layout.fragment) {
 
     private lateinit var binding: FragmentBinding
     private val adapter by lazy { Adapter() }
@@ -23,9 +24,8 @@ class FragmentRuwlar: Fragment(R.layout.fragment) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentBinding.bind(view)
 
+        sharedPreferences = requireActivity().getSharedPreferences("abcde", Context.MODE_PRIVATE)
         ruwlarDao = DataBase.getInstance(requireContext()).ruwlarDao()
-
-        sharedPreferences = requireActivity().getSharedPreferences("Ruwlar", Context.MODE_PRIVATE)
 
         binding.rvFragment.adapter = adapter
 
@@ -35,7 +35,7 @@ class FragmentRuwlar: Fragment(R.layout.fragment) {
             Provider.getNewRuwlar(requireContext(), it.id)
         }
 
-        Provider.newList.observe(viewLifecycleOwner){
+        Provider.newList.observe(viewLifecycleOwner) {
             adapter.models = it
 
             it.firstOrNull()?.let {
@@ -43,14 +43,10 @@ class FragmentRuwlar: Fragment(R.layout.fragment) {
             }
         }
 
-        binding.apply {
-            val ruwlar = ruwlarDao.getNameRuwlar(0)
-            adapter.models = ruwlar
-
-            adapter.setItemClickListener {
-                adapter.models = ruwlarDao.getNameRuwlar(it.id)
-            }
-            rvFragment.adapter = adapter
+        binding.searchView.addTextChangedListener {
+            val searchValue = it.toString()
+            val newList = ruwlarDao.searchName("%$searchValue%")
+            adapter.models = newList
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.example.ruwlar
 
+import android.content.Context
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -13,11 +14,10 @@ import com.example.ruwlar.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
-    private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
+    private val binding by lazy { ActivityMainBinding.inflate(layoutInflater)}
     private lateinit var ruwlarDao: RuwlarDao
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var ruwlarDataBase: DataBase
-    private var adapter = Adapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
@@ -25,19 +25,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        sharedPreferences = getSharedPreferences("Ruwlar", MODE_PRIVATE)
+        sharedPreferences = getSharedPreferences("abcde", Context.MODE_PRIVATE)
         ruwlarDataBase = DataBase.getInstance(this)
         ruwlarDao = ruwlarDataBase.ruwlarDao()
 
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, FragmentRuwlar())
             .commit()
-
-        binding.searchView.addTextChangedListener {
-            val searchValue = it.toString()
-            val newList = ruwlarDao.searchName("%$searchValue%")
-            adapter.models = newList
-        }
     }
 
     override fun onBackPressed() {
