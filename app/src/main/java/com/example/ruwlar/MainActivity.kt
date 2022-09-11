@@ -11,6 +11,8 @@ import com.example.ruwlar.data.DataBase
 import com.example.ruwlar.data.Keys.PARENT_ID
 import com.example.ruwlar.data.RuwlarDao
 import com.example.ruwlar.databinding.ActivityMainBinding
+import io.reactivex.rxjava3.schedulers.Schedulers
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -41,7 +43,7 @@ class MainActivity : AppCompatActivity() {
             finish()
         } else {
             val grandParentId = ruwlarDao.getParentId(parentId)
-            Provider.getNewRuwlar(this, grandParentId)
+            Provider.getNewRuwlar(this, Observable{grandParentId})
         }
     }
 }

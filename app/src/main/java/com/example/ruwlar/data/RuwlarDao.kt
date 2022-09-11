@@ -1,8 +1,9 @@
 package com.example.ruwlar.data
 
-import android.database.Observable
+
 import androidx.room.Dao
 import androidx.room.Query
+import io.reactivex.rxjava3.core.Observable
 
 @Dao
 interface RuwlarDao {
@@ -13,5 +14,5 @@ interface RuwlarDao {
     fun searchName(searchValue: String): Observable<List<Ruwlar>>
 
     @Query("SELECT parent_id FROM rwlar WHERE id = :id")
-    fun getParentId(id: Int): Int
+    fun getParentId(id: Int): Observable<Int>
 }

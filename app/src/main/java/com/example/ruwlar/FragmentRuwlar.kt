@@ -11,6 +11,7 @@ import com.example.ruwlar.data.DataBase
 import com.example.ruwlar.data.Keys
 import com.example.ruwlar.data.RuwlarDao
 import com.example.ruwlar.databinding.FragmentBinding
+import io.reactivex.rxjava3.schedulers.Schedulers
 
 class FragmentRuwlar : Fragment(R.layout.fragment) {
 
@@ -46,7 +47,8 @@ class FragmentRuwlar : Fragment(R.layout.fragment) {
         binding.searchView.addTextChangedListener {
             val searchValue = it.toString()
             val newList = ruwlarDao.searchName("%$searchValue%")
-            adapter.models = newList
+            val all = newList
+            all.subscribeOn(Schedulers.io())
         }
     }
 }
