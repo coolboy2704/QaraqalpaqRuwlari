@@ -5,12 +5,15 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import com.example.ruwlar.data.DataBase
 import com.example.ruwlar.data.Keys
 import com.example.ruwlar.data.RuwlarDao
 import com.example.ruwlar.databinding.FragmentBinding
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Scheduler
 import io.reactivex.rxjava3.schedulers.Schedulers
 
 class FragmentRuwlar : Fragment(R.layout.fragment) {
@@ -49,6 +52,16 @@ class FragmentRuwlar : Fragment(R.layout.fragment) {
             val newList = ruwlarDao.searchName("%$searchValue%")
             val all = newList
             all.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                {
+                    adapter.models = it
+                },
+                {
+                    Toast.makeText(context, "${it.message}", Toast.LENGTH_SHORT).show()
+                }
+            )
+
         }
     }
 }

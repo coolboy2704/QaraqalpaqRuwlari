@@ -5,12 +5,14 @@ import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.widget.addTextChangedListener
 import com.example.ruwlar.data.DataBase
 import com.example.ruwlar.data.Keys.PARENT_ID
 import com.example.ruwlar.data.RuwlarDao
 import com.example.ruwlar.databinding.ActivityMainBinding
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
 import java.util.*
 
@@ -43,7 +45,17 @@ class MainActivity : AppCompatActivity() {
             finish()
         } else {
             val grandParentId = ruwlarDao.getParentId(parentId)
-            Provider.getNewRuwlar(this, Observable{grandParentId})
+            grandParentId
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                {
+                    Provider.getNewRuwlar(this, it)
+                },
+                {
+                    Toast.makeText(this, "${it.message}", Toast.LENGTH_SHORT).show()
+                }
+            )
         }
     }
 }

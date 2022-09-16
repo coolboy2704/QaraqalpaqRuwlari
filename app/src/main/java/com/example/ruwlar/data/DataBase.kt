@@ -6,7 +6,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [Ruwlar::class], version = 2)
+@Database(entities = [Ruwlar::class], version = 3)
 abstract class DataBase: RoomDatabase() {
     companion object{
         private var INSTANCE: DataBase? = null
@@ -26,7 +26,6 @@ abstract class DataBase: RoomDatabase() {
                     "Rwlar.db"
                 )
                     .createFromAsset("Rwlar.db")
-                    .allowMainThreadQueries()
                     .build()
                 INSTANCE = db
                 return db

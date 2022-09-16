@@ -2,7 +2,7 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
-    id 'kotlin-android-extensions'
+   // id 'kotlin-android-extensions'
 
 }
 
@@ -54,6 +54,11 @@ dependencies {
     implementation "androidx.room:room-runtime:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
 
+    implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
     implementation "io.reactivex.rxjava3:rxjava:3.0.2"
-    implementation "android.room:room-rxjava3:$room_version"
+    implementation ("androidx.room:room-rxjava3:$room_version")
+
+    dependencies {
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9")
+    }
 }

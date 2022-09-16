@@ -7,13 +7,16 @@ import android.os.Handler
 import android.view.View
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatDelegate
-import kotlinx.android.synthetic.main.activity_splash.*
+import com.example.ruwlar.databinding.ActivitySplashBinding
 
 class SplashActivity : AppCompatActivity() {
+
+    private val binding by lazy { ActivitySplashBinding.inflate(layoutInflater)}
+
     override fun onCreate(savedInstanceState: Bundle?) {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_splash)
+        setContentView(binding.root)
 
         supportActionBar?.hide()
 
@@ -29,8 +32,8 @@ class SplashActivity : AppCompatActivity() {
                         View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
             }
         }
-        texnopos_splash.setMinAndMaxFrame(0, 64)
-        texnopos_splash.playAnimation()
+        binding.texnoposSplash.setMinAndMaxFrame(0, 64)
+        binding.texnoposSplash.playAnimation()
 
         Handler().postDelayed({
             val intent = Intent(this, MainActivity::class.java)
